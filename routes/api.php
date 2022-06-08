@@ -51,7 +51,7 @@ Route::prefix('v1')->group(function ()
 
     Route::prefix('grades')->group(function ()
     {
-       Route::get('assignations/{id}/students/{id}', [GradeController::class, 'getGradesOfStudentOfAssignation']);//
+       //Route::get('assignations/{id}/students/{idStudent}', [GradeController::class, 'getGradesOfStudentOfAssignation']);//
     });
 
 });
