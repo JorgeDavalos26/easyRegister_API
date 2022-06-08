@@ -25,9 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () 
 {
-    /* Route::apiResource('teachers', TeacherController::class);//
-    Route::apiResource('classes', ClasssController::class);//
-    Route::apiResource('assignations', AssignationController::class);// */
+    Route::apiResource('classes', ClasssController::class);
+    Route::apiResource('assignations', AssignationController::class);
 
     Route::prefix('auth')->group(function ()
     {

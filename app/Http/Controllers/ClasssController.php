@@ -11,6 +11,7 @@ use App\Models\Evaluation;
 use App\Models\Evaluations;
 use App\Models\Grade;
 use App\Models\Student;
+use Illuminate\Http\Request;
 
 class ClasssController extends Controller
 {
@@ -21,17 +22,8 @@ class ClasssController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $classes = Classs::with(['teacher', 'teacher.user'])->get();
+        return response()->success($classes);
     }
 
     /**
@@ -42,7 +34,12 @@ class ClasssController extends Controller
      */
     public function store(StoreClasssRequest $request)
     {
-        //
+        $class = Classs::create([
+            'name' => $request->name,
+            'teacher_id' => $request->teacher_id
+        ]);
+
+        return response()->success($class);
     }
 
     /**
@@ -51,20 +48,9 @@ class ClasssController extends Controller
      * @param  \App\Models\Classs  $classs
      * @return \Illuminate\Http\Response
      */
-    public function show(Classs $classs)
+    public function show(Classs $class)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Classs  $classs
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Classs $classs)
-    {
-        //
+        return response()->success($class);
     }
 
     /**
@@ -74,7 +60,7 @@ class ClasssController extends Controller
      * @param  \App\Models\Classs  $classs
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateClasssRequest $request, Classs $classs)
+    public function update(UpdateClasssRequest $request, Classs $class)
     {
         //
     }
@@ -85,28 +71,31 @@ class ClasssController extends Controller
      * @param  \App\Models\Classs  $classs
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classs $classs)
+    public function destroy(Classs $class)
     {
-        //
+        $class->delete();
+        return response()->success($class);
     }
 
     public function getStudentsOfClass($idClass)
     {
         $classes = ClassStudent::where('classs_id', $idClass)->get();
 
+        $students = [];
+
         foreach($classes as $class)
         {
             $students[] = $class->student;
         }
-
-        return response()->json(['message' => 'OK', $students], 200);
+        
+        return response()->success($students);
     }
 
     public function getAssignationsOfClass($idClass)
     {
         $assignations = Assignation::where('classs_id', $idClass)->get();
 
-        return response()->json(['message' => 'OK', $assignations],200);
+        return response()->success($assignations);
     }
 
     public function getGradesOfClass($idClass)
@@ -118,16 +107,12 @@ class ClasssController extends Controller
         
         $classes = ClassStudent::where('classs_id', $idClass)->get();
 
+        $students = [];
+
         foreach($classes as $class)
         {
             $students[] = $class->student;
         }
-
-
-
-
-        $evaluations = Evaluation::where('classs_id', $idClass)->get();
-
 
 
 
@@ -177,24 +162,14 @@ class ClasssController extends Controller
 
         }
 
-        return response()->json(['message' => 'OK', $studentsWithGrades],200);
+        return response()->success($studentsWithGrades);
     }
 
     public function getEvaluationsOfClass($idClass)
     {
         $evaluations = Evaluation::where('classs_id', $idClass)->get();
 
-        return response()->json();
-    }
-
-
-
-    // util
-
-    function getRecordById($id, $array)
-    {
-        foreach($array as $a) if($id == $a->id) return $a;
-        return null;
+        return response()->success($evaluations);
     }
 
 

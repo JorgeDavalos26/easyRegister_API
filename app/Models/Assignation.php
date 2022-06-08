@@ -20,4 +20,9 @@ class Assignation extends Model
     {
         return $this->belongsTo(Evaluation::class, 'evaluation_id', 'id');
     }
+
+    public function classs()
+    {
+        return $this->belongsTo(Classs::class, 'classs_id', 'id');
+    }
 }

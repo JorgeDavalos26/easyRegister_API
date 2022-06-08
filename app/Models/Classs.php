@@ -13,4 +13,9 @@ class Classs extends Model
         'teacher_id',
         'name',
     ];
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
+    }
 }
