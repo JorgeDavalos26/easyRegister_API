@@ -10,6 +10,7 @@ class Evaluation extends Model
     use HasFactory;
 
     protected $fillable = [
+        'classs_id',
         'name',
         'value'
     ];

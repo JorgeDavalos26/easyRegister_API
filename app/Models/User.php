@@ -40,4 +40,10 @@ class User extends Authenticatable
     protected $casts = [
         
     ];
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+    
 }

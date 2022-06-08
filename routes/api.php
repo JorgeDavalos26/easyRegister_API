@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\AssignationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClasssController;
+use App\Http\Controllers\GradeController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,29 +25,28 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () 
 {
-    Route::apiResource('teachers', TeacherController::class);//
+    /* Route::apiResource('teachers', TeacherController::class);//
     Route::apiResource('classes', ClasssController::class);//
-    Route::apiResource('assignations', AssignationController::class);//
+    Route::apiResource('assignations', AssignationController::class);// */
 
     Route::prefix('auth')->group(function ()
     {
-        Route::post('login', [AuthController::class, 'login']);//-
-        Route::post('logout', [AuthController::class, 'logout']);//-
-        Route::post('register', [AuthController::class, 'register']);//-
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('register', [AuthController::class, 'register']);
     });
     
     Route::prefix('teachers')->group(function ()
     {
-        Route::get('{id}/classes', [TeacherController::class, 'getClassesOfTeacher']);//-
+        Route::get('{id}/classes', [TeacherController::class, 'getClassesOfTeacher']);
     });
 
     Route::prefix('classes')->group(function ()
     {
-       Route::get('{id}/students', [ClasssController::class, 'getStudentsOfClass']);//-
-       Route::get('{id}/students/{id}', [ClasssController::class, 'getStudentOfClass']);//-
-       Route::get('{id}/assignations', [ClasssController::class, 'getAssignationsOfClass']);//-
-       Route::get('{id}/grades', [ClasssController::class, 'getGradesOfClass']);//-
-       Route::get('{id}/evaluations', [ClasssController::class, 'getEvaluationsOfClass']);//
+       Route::get('{id}/students', [ClasssController::class, 'getStudentsOfClass']);
+       Route::get('{id}/assignations', [ClasssController::class, 'getAssignationsOfClass']);
+       Route::get('{id}/grades', [ClasssController::class, 'getGradesOfClass']);
+       Route::get('{id}/evaluations', [ClasssController::class, 'getEvaluationsOfClass']);
     });
 
     Route::prefix('grades')->group(function ()

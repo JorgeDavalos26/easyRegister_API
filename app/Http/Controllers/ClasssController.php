@@ -99,23 +99,14 @@ class ClasssController extends Controller
             $students[] = $class->student;
         }
 
-        return response()->json();
-    }
-
-    public function getStudentOfClass($idClass, $idStudent)
-    {
-        $class = ClassStudent::where('classs_id', $idClass)->where('student_id', $idStudent)->first();
-
-        $student = $class->student;
-
-        return response()->json();
+        return response()->json(['message' => 'OK', $students], 200);
     }
 
     public function getAssignationsOfClass($idClass)
     {
         $assignations = Assignation::where('classs_id', $idClass)->get();
 
-        return response()->json();
+        return response()->json(['message' => 'OK', $assignations],200);
     }
 
     public function getGradesOfClass($idClass)
@@ -177,14 +168,16 @@ class ClasssController extends Controller
 
             foreach($evaluationGrades as $key => $evals)
             {
-                $studentGrade[$key] = ($evals['obtained'] * $evals['percentage'])/$evals['totalAssignations'];
+                $studentGrade[$key] = ($evals['obtained'] * $evals['percentage'])/($evals['totalAssignations'] * 100);
             }
+
+            $studentGrade['student'] = $s;
 
             $studentsWithGrades[] = $studentGrade;
 
         }
 
-        return response()->json();
+        return response()->json(['message' => 'OK', $studentsWithGrades],200);
     }
 
     public function getEvaluationsOfClass($idClass)

@@ -15,7 +15,7 @@ class AssignationFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'description' => $this->faker->paragraphs(),
+            'description' => $this->faker->paragraph(),
         ];
     }
 }

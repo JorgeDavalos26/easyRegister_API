@@ -15,20 +15,6 @@ class ClasssFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'encuadre' => '[
-                {
-                  "name":"Primer parcial",
-                  "value":"20"
-                },
-                {
-                  "name":"Segundo parcial",
-                  "value":"40"
-                },
-                {
-                  "name":"Tercer parcial",
-                  "value":"40"
-                }
-            ]',
         ];
     }
 }

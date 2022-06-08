@@ -24,12 +24,12 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // users
+        //------------------------------------ users
 
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
 
-        // teachers
+        //------------------------------------ teachers
 
         $teacher1 = Teacher::factory()->create([
             'user_id' => $user1->id
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user2->id
         ]);
 
-        // students
+        //------------------------------------ students
 
         $student1 = Student::factory()->create([
             'teacher_id' => $teacher1->id
@@ -49,7 +49,15 @@ class DatabaseSeeder extends Seeder
             'teacher_id' => $teacher2->id
         ]);
 
-        // classes
+        $student3 = Student::factory()->create([
+            'teacher_id' => $teacher1->id
+        ]);
+
+        $student4 = Student::factory()->create([
+            'teacher_id' => $teacher2->id
+        ]);
+
+        //------------------------------------ classes
 
         $classs1 = Classs::factory()->create([
             'teacher_id' => $teacher1->id
@@ -59,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'teacher_id' => $teacher2->id
         ]);
 
-        // class students
+        //------------------------------------ class students
 
         ClassStudent::factory()->create([
             'classs_id' => $classs1->id,
@@ -67,21 +75,35 @@ class DatabaseSeeder extends Seeder
         ]);
 
         ClassStudent::factory()->create([
+            'classs_id' => $classs1->id,
+            'student_id' => $student3->id,
+        ]);
+
+        ClassStudent::factory()->create([
+            'classs_id' => $classs1->id,
+            'student_id' => $student4->id,
+        ]);
+
+        ClassStudent::factory()->create([
             'classs_id' => $classs2->id,
             'student_id' => $student2->id,
         ]);
 
-        // evaluations
+        //------------------------------------ evaluations
 
-        $evaluation1 = Evaluation::factory(3)->create([
+        $evaluation1 = Evaluation::factory()->create([
             'classs_id' => $classs1->id,
         ]);
 
-        $evaluation2 = Evaluation::factory(3)->create([
+        $evaluation2 = Evaluation::factory()->create([
+            'classs_id' => $classs1->id,
+        ]);
+
+        $evaluation3 = Evaluation::factory()->create([
             'classs_id' => $classs2->id,
         ]);
 
-        //assignations
+        //------------------------------------ assignations
 
         $assignation1 = Assignation::factory()->create([
             'classs_id' => $classs1->id,
@@ -89,11 +111,16 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $assignation2 = Assignation::factory()->create([
-            'classs_id' => $classs2->id,
+            'classs_id' => $classs1->id,
             'evaluation_id' => $evaluation2->id
         ]);
 
-        // grades
+        $assignation3 = Assignation::factory()->create([
+            'classs_id' => $classs2->id,
+            'evaluation_id' => $evaluation3->id
+        ]);
+
+        //------------------------------------ grades
 
         Grade::factory()->create([
             'student_id' => $student1->id,
@@ -101,8 +128,28 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Grade::factory()->create([
-            'student_id' => $student2->id,
+            'student_id' => $student3->id,
+            'assignation_id' => $assignation1->id
+        ]);
+
+        Grade::factory()->create([
+            'student_id' => $student4->id,
+            'assignation_id' => $assignation1->id
+        ]);
+
+        Grade::factory()->create([
+            'student_id' => $student1->id,
             'assignation_id' => $assignation2->id
+        ]);
+
+        Grade::factory()->create([
+            'student_id' => $student4->id,
+            'assignation_id' => $assignation2->id
+        ]);
+
+        Grade::factory()->create([
+            'student_id' => $student2->id,
+            'assignation_id' => $assignation3->id
         ]);
 
     }
