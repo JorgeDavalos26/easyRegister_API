@@ -17,6 +17,8 @@ class CreateAssignationsTable extends Migration
             $table->id();
             $table->foreignId('classs_id')->references('id')->on('classses')
                 ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('evaluation_id')->references('id')->on('evaluations')
+                ->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->text('description');
             $table->timestamps();

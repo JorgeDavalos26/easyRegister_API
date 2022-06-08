@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Evaluations;
 use App\Http\Requests\StoreEvaluationsRequest;
 use App\Http\Requests\UpdateEvaluationsRequest;
+use App\Models\Evaluation;
 
-class EvaluationsController extends Controller
+class EvaluationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,7 +46,7 @@ class EvaluationsController extends Controller
      * @param  \App\Models\Evaluations  $evaluations
      * @return \Illuminate\Http\Response
      */
-    public function show(Evaluations $evaluations)
+    public function show(Evaluation $evaluations)
     {
         //
     }
@@ -56,7 +57,7 @@ class EvaluationsController extends Controller
      * @param  \App\Models\Evaluations  $evaluations
      * @return \Illuminate\Http\Response
      */
-    public function edit(Evaluations $evaluations)
+    public function edit(Evaluation $evaluations)
     {
         //
     }
@@ -68,7 +69,7 @@ class EvaluationsController extends Controller
      * @param  \App\Models\Evaluations  $evaluations
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEvaluationsRequest $request, Evaluations $evaluations)
+    public function update(UpdateEvaluationsRequest $request, Evaluation $evaluations)
     {
         //
     }
@@ -79,7 +80,7 @@ class EvaluationsController extends Controller
      * @param  \App\Models\Evaluations  $evaluations
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Evaluations $evaluations)
+    public function destroy(Evaluation $evaluations)
     {
         //
     }

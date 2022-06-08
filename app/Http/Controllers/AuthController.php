@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,5 +30,28 @@ class AuthController extends Controller
         Auth::logout();
 
         return response()->json(['message' => 'OK'], 200);
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'birth_date' => 'required'
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password
+        ]);
+
+        $teacher = Teacher::create([
+            'user_id' => $user->id,
+            'birth_date' => $request->birth_date
+        ]);
+
+        return response()->json();
     }
 }

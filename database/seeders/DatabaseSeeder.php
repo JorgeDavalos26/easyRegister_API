@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Assignation;
 use App\Models\Classs;
 use App\Models\ClassStudent;
+use App\Models\Evaluation;
 use App\Models\Evaluations;
 use App\Models\Grade;
 use App\Models\Student;
@@ -70,14 +71,26 @@ class DatabaseSeeder extends Seeder
             'student_id' => $student2->id,
         ]);
 
+        // evaluations
+
+        $evaluation1 = Evaluation::factory(3)->create([
+            'classs_id' => $classs1->id,
+        ]);
+
+        $evaluation2 = Evaluation::factory(3)->create([
+            'classs_id' => $classs2->id,
+        ]);
+
         //assignations
 
         $assignation1 = Assignation::factory()->create([
-            'classs_id' => $classs1->id
+            'classs_id' => $classs1->id,
+            'evaluation_id' => $evaluation1->id
         ]);
 
         $assignation2 = Assignation::factory()->create([
-            'classs_id' => $classs2->id
+            'classs_id' => $classs2->id,
+            'evaluation_id' => $evaluation2->id
         ]);
 
         // grades
@@ -90,16 +103,6 @@ class DatabaseSeeder extends Seeder
         Grade::factory()->create([
             'student_id' => $student2->id,
             'assignation_id' => $assignation2->id
-        ]);
-
-        // evaluations
-
-        Evaluations::factory(3)->create([
-            'classs_id' => $classs1->id,
-        ]);
-
-        Evaluations::factory(3)->create([
-            'classs_id' => $classs2->id,
         ]);
 
     }

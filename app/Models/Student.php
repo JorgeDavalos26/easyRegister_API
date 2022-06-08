@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'firstname',
+        'lastname',
+        'email',
+        'parent_whatsapp'
+    ];
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class, 'student_id', 'id');
+    }
 }

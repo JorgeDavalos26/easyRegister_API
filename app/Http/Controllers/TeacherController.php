@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
+use App\Models\Classs;
+use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
@@ -83,4 +85,13 @@ class TeacherController extends Controller
     {
         //
     }
+
+
+    public function getClassesOfTeacher(Request $request, $idTeacher)
+    {
+        $classes = Classs::where('teacher_id', $idTeacher)->get();
+
+        return response()->json();
+    }
+
 }

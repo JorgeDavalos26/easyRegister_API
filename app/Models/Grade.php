@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'value',
+    ];
+
+    public function assignment()
+    {
+        return $this->belongsTo(Assignation::class, 'assignation_id', 'id');
+    }
 }

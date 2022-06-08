@@ -26,22 +26,23 @@ Route::prefix('v1')->group(function ()
 
     Route::prefix('auth')->group(function ()
     {
-        Route::post('login', [AuthController::class, 'login']);//
-        Route::post('logout', [AuthController::class, 'logout']);//
-        Route::post('register', [AuthController::class, 'register']);//
+        Route::post('login', [AuthController::class, 'login']);//-
+        Route::post('logout', [AuthController::class, 'logout']);//-
+        Route::post('register', [AuthController::class, 'register']);//-
     });
     
     Route::prefix('teachers')->group(function ()
     {
-        Route::get('{id}/classes', [ClasssController::class, 'getClassesOfTeacher']);//
+        Route::get('{id}/classes', [TeacherController::class, 'getClassesOfTeacher']);//-
     });
 
     Route::prefix('classes')->group(function ()
     {
-       Route::get('{id}/students', [ClasssController::class, 'getStudentsOfClass']);//
-       Route::get('{id}/students/{id}', [ClasssController::class, 'getStudentOfClass']);//
-       Route::get('{id}/assignations', [ClasssController::class, 'getAssignationsOfClass']);//
-       Route::get('{id}/grades', [ClasssController::class, 'getGradesOfClass']);//
+       Route::get('{id}/students', [ClasssController::class, 'getStudentsOfClass']);//-
+       Route::get('{id}/students/{id}', [ClasssController::class, 'getStudentOfClass']);//-
+       Route::get('{id}/assignations', [ClasssController::class, 'getAssignationsOfClass']);//-
+       Route::get('{id}/grades', [ClasssController::class, 'getGradesOfClass']);//-
+       Route::get('{id}/evaluations', [ClasssController::class, 'getEvaluationsOfClass']);//
     });
 
     Route::prefix('grades')->group(function ()
