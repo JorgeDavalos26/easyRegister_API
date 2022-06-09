@@ -14,7 +14,7 @@ class GradeFactory extends Factory
     public function definition()
     {
         return [
-            'value' => $this->faker->randomElement([60,80,90,100])
+            'value' => $this->faker->randomElement([60,70,75,80,85,90,95,100])
         ];
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Evaluation;
 use App\Models\Evaluations;
 use App\Models\Grade;
 use App\Models\Student;
+use Illuminate\Http\Request;
 
 class ClasssController extends Controller
 {
@@ -21,17 +22,8 @@ class ClasssController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $classes = Classs::with(['teacher', 'teacher.user'])->get();
+        return response()->success($classes);
     }
 
     /**
@@ -42,7 +34,26 @@ class ClasssController extends Controller
      */
     public function store(StoreClasssRequest $request)
     {
-        //
+        $class = Classs::create([
+            'name' => $request->name,
+            'base' => $request->base,
+            'teacher_id' => $request->teacher_id
+        ]);
+
+        $evals = json_decode($request->evaluations);
+
+        foreach($evals as $e)
+        {
+            Evaluation::create([
+                "name" => $e->name,
+                "value" => $e->value,
+                "classs_id" => $class->id,
+            ]);
+        }
+
+        $class = Classs::with(['evaluations'])->where('id', $class->id)->first();
+
+        return response()->success($class);
     }
 
     /**
@@ -51,20 +62,9 @@ class ClasssController extends Controller
      * @param  \App\Models\Classs  $classs
      * @return \Illuminate\Http\Response
      */
-    public function show(Classs $classs)
+    public function show(Classs $class)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Classs  $classs
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Classs $classs)
-    {
-        //
+        return response()->success($class);
     }
 
     /**
@@ -74,7 +74,7 @@ class ClasssController extends Controller
      * @param  \App\Models\Classs  $classs
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateClasssRequest $request, Classs $classs)
+    public function update(UpdateClasssRequest $request, Classs $class)
     {
         //
     }
@@ -85,116 +85,147 @@ class ClasssController extends Controller
      * @param  \App\Models\Classs  $classs
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classs $classs)
+    public function destroy(Classs $class)
     {
-        //
+        $class->delete();
+        return response()->success($class);
     }
 
     public function getStudentsOfClass($idClass)
     {
         $classes = ClassStudent::where('classs_id', $idClass)->get();
 
+        $students = [];
+
         foreach($classes as $class)
         {
             $students[] = $class->student;
         }
-
-        return response()->json(['message' => 'OK', $students], 200);
+        
+        return response()->success($students);
     }
 
     public function getAssignationsOfClass($idClass)
     {
         $assignations = Assignation::where('classs_id', $idClass)->get();
 
-        return response()->json(['message' => 'OK', $assignations],200);
+        return response()->success($assignations);
     }
 
     public function getGradesOfClass($idClass)
     {
+        $class = Classs::find($idClass);
 
-        $assignations = Assignation::where('classs_id', $idClass)->get();
-
-
-        
         $classes = ClassStudent::where('classs_id', $idClass)->get();
 
-        foreach($classes as $class)
-        {
-            $students[] = $class->student;
-        }
+        $students = [];
 
+        foreach($classes as $c)
+        {
+            $students[] = $c->student;
+        }
 
 
 
         $evaluations = Evaluation::where('classs_id', $idClass)->get();
 
 
+        
 
 
         $studentsWithGrades = [];
 
         foreach($students as $s)
         {
-            $student = Student::where('id', $s->id)
+            /* $student = Student::where('id', $s->id)
                 ->with(['grades', 'grades.assignation' => function($query) use ($idClass)
                 {
                     $query->where('classs_id', $idClass);
 
                 }, 'grades.assignation.evaluation'])->first();
+            */
 
+            /* $student = $student = Student::where('id', $s->id)
+                ->with(['grades', 'grades.assignation' => function($query) use ($idClass)
+                {
+                    $query->whereHas('classs', function($query) 
+                    {
+                        $query->where('id', 1);
+                    });
 
-            $evaluationGrades = [];
+                }, 'grades.assignation.evaluation'])->first(); */
+
+            $student = Student::where('id', $s->id)
+                ->with(['grades' => function($query) use ($idClass)
+                {
+                    $query->whereHas('assignation', function($query) use ($idClass)
+                    {
+                        $query->whereHas('classs', function($query) use ($idClass)
+                        {
+                            $query->where('id', $idClass);
+                        });
+                    });
+
+                }
+                , 'grades.assignation', 'grades.assignation.evaluation'])->first();
+
+            $evalPerGrade = [];
+        
+            foreach($evaluations as $e)
+            {
+                $numberAssignations = Assignation::where('classs_id', $idClass)
+                    ->where('evaluation_id', $e->id)->count();
+
+                $evalPerGrade[$e->name] = [
+                    "evaluation" => $e,
+                    "totalAssignations" => $numberAssignations,
+                    "percentageToEvaluate" => $e->value,
+                    "totalToEvaluate" => $class->base,
+                    "totalObtained" => 0,
+                    "totalAssignationsObtained" => 0
+                ];
+            }
+
+            //return $evalPerGrade;
 
             foreach($student->grades as $grade)
             {
-                $evaluation = $grade->assignation->evaluation;
-
-                if(!array_key_exists($evaluation->name, $evaluationGrades))
-                {
-                    $numberAssignations = Assignation::where('classs_id', $idClass)
-                        ->where('evaluation_id', $evaluation->id)->count();
-
-                    $evaluationGrades[$evaluation->name] = [
-                        "obtained" => 0,
-                        "percentage" => $evaluation->value,
-                        "totalAssignations" => $numberAssignations
-                    ];
-                }
-
-                $evaluationGrades[$evaluation->name]['obtained'] += $grade->value;
+                $e = $grade->assignation->evaluation;
+                $evalPerGrade[$e->name]["totalObtained"] += $grade->value;
+                $evalPerGrade[$e->name]["totalAssignationsObtained"] += 1;
             }
+
+
 
             $studentGrade = [];
 
-            foreach($evaluationGrades as $key => $evals)
+            $studentGrade = [
+                "student_id" => $s->id,
+                "student" => $s->firstname . " " . $s->lastname,
+                "total" => 0,
+            ];
+
+            foreach($evaluations as $e)
             {
-                $studentGrade[$key] = ($evals['obtained'] * $evals['percentage'])/($evals['totalAssignations'] * 100);
+                $evl = (object)$evalPerGrade[$e->name];
+
+                $studentGrade[strtolower($e->name)] = 
+                    (($evl->totalObtained/$evl->totalAssignations)*$evl->percentageToEvaluate)/$evl->totalToEvaluate;
+
+                $studentGrade["total"] += $studentGrade[strtolower($e->name)];
             }
 
-            $studentGrade['student'] = $s;
-
             $studentsWithGrades[] = $studentGrade;
-
         }
 
-        return response()->json(['message' => 'OK', $studentsWithGrades],200);
+        return response()->success($studentsWithGrades);
     }
 
     public function getEvaluationsOfClass($idClass)
     {
         $evaluations = Evaluation::where('classs_id', $idClass)->get();
 
-        return response()->json();
-    }
-
-
-
-    // util
-
-    function getRecordById($id, $array)
-    {
-        foreach($array as $a) if($id == $a->id) return $a;
-        return null;
+        return response()->success($evaluations);
     }
 
 

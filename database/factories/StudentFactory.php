@@ -17,8 +17,8 @@ class StudentFactory extends Factory
             'firstname' => $this->faker->firstName(),
             'lastname' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
-            'parent_whatsapp' => $this->faker->numerify('##-####-####'),
-            'number_list' => $this->faker->randomNumber(2),
+            'parent_whatsapp' => $this->faker->numerify('33########'),
+            'number_list' => $this->faker->numberBetween(1, 30),
         ];
     }
 }

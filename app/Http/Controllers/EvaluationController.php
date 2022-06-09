@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Evaluations;
-use App\Http\Requests\StoreEvaluationsRequest;
-use App\Http\Requests\UpdateEvaluationsRequest;
+use App\Http\Requests\StoreEvaluationRequest;
+use App\Http\Requests\UpdateEvaluationRequest;
 use App\Models\Evaluation;
 
 class EvaluationController extends Controller
@@ -16,17 +15,8 @@ class EvaluationController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $evaluations = Evaluation::with(['classs'])->get();
+        return response()->success($evaluations);
     }
 
     /**
@@ -35,9 +25,15 @@ class EvaluationController extends Controller
      * @param  \App\Http\Requests\StoreEvaluationsRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEvaluationsRequest $request)
+    public function store(StoreEvaluationRequest $request)
     {
-        //
+        $evaluation = Evaluation::create([
+            'name' => $request->name,
+            'value' => $request->value,
+            'classs_id' => $request->classs_id,
+        ]);
+
+        return response()->success($evaluation);
     }
 
     /**
@@ -46,20 +42,9 @@ class EvaluationController extends Controller
      * @param  \App\Models\Evaluations  $evaluations
      * @return \Illuminate\Http\Response
      */
-    public function show(Evaluation $evaluations)
+    public function show(Evaluation $evaluation)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Evaluations  $evaluations
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Evaluation $evaluations)
-    {
-        //
+        return response()->success($evaluation);
     }
 
     /**
@@ -69,7 +54,7 @@ class EvaluationController extends Controller
      * @param  \App\Models\Evaluations  $evaluations
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEvaluationsRequest $request, Evaluation $evaluations)
+    public function update(UpdateEvaluationRequest $request, Evaluation $evaluations)
     {
         //
     }
@@ -80,8 +65,9 @@ class EvaluationController extends Controller
      * @param  \App\Models\Evaluations  $evaluations
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Evaluation $evaluations)
+    public function destroy(Evaluation $evaluation)
     {
-        //
+        $evaluation->delete();
+        return response()->success($evaluation);
     }
 }
