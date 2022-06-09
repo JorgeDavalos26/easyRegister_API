@@ -14,7 +14,7 @@ class TeacherFactory extends Factory
     public function definition()
     {
         return [
-            'birth_date' => $this->faker->dateTime(),
+            'birth_date' => $this->faker->date('Y-m-d')
         ];
     }
 }
