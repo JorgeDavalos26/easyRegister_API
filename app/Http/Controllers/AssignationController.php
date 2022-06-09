@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assignation;
 use App\Http\Requests\StoreAssignationRequest;
 use App\Http\Requests\UpdateAssignationRequest;
+use App\Models\Grade;
 
 class AssignationController extends Controller
 {
@@ -71,4 +72,19 @@ class AssignationController extends Controller
         $assignation->delete();
         return response()->success($assignation);
     }
+
+
+    public function getGradeOfStudentInAssignation($idAssignation, $idStudent)
+    {
+        $grade = Grade::with(['student'])
+            ->where('assignation_id', $idAssignation)->where('student_id', $idStudent)->first();
+        return response()->success($grade);
+    }
+
+    public function getGradesOfAssignation($idAssignation)
+    {
+        $grades = Grade::with(['student'])->where('assignation_id', $idAssignation)->get();
+        return response()->success($grades);
+    }
+
 }

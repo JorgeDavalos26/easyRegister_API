@@ -14,4 +14,15 @@ class Evaluation extends Model
         'name',
         'value'
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
+    public function classs()
+    {
+        return $this->belongsTo(Classs::class, 'classs_id', 'id');
+    }
+
 }

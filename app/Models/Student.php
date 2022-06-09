@@ -17,6 +17,11 @@ class Student extends Model
         'parent_whatsapp'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
     public function grades()
     {
         return $this->hasMany(Grade::class, 'student_id', 'id');

@@ -27,6 +27,8 @@ Route::prefix('v1')->group(function ()
 {
     Route::apiResource('classes', ClasssController::class);
     Route::apiResource('assignations', AssignationController::class);
+    Route::apiResource('evaluations', EvaluationController::class);
+    Route::apiResource('grades', GradeController::class);
 
     Route::prefix('auth')->group(function ()
     {
@@ -48,9 +50,10 @@ Route::prefix('v1')->group(function ()
        Route::get('{id}/evaluations', [ClasssController::class, 'getEvaluationsOfClass']);
     });
 
-    Route::prefix('grades')->group(function ()
+    Route::prefix('assignations')->group(function ()
     {
-       //Route::get('assignations/{id}/students/{idStudent}', [GradeController::class, 'getGradesOfStudentOfAssignation']);//
+       Route::get('{id}/student/{idStudent}/grade', [AssignationController::class, 'getGradeOfStudentInAssignation']);
+       Route::get('{id}/grades', [AssignationController::class, 'getGradesOfAssignation']);
     });
 
 });

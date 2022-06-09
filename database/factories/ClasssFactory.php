@@ -15,6 +15,7 @@ class ClasssFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
+            'base' => $this->faker->randomElement([10,100]),
         ];
     }
 }
