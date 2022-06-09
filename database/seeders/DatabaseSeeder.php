@@ -232,18 +232,24 @@ class DatabaseSeeder extends Seeder
 
         // student 1
 
+        $valsBase100 = [60,70,75,80,85,90,95,100];
+        $valsBase10 = [6,7,8,9,10];
+
         Grade::factory()->create([
             'student_id' => $student1->id,
+            'value' => ($assignation1->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation1->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student1->id,
+            'value' => ($assignation2->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation2->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student1->id,
+            'value' => ($assignation7->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation7->id
         ]);
 
@@ -251,16 +257,19 @@ class DatabaseSeeder extends Seeder
 
         Grade::factory()->create([
             'student_id' => $student3->id,
+            'value' => ($assignation1->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation1->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student3->id,
+            'value' => ($assignation3->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation3->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student3->id,
+            'value' => ($assignation7->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation7->id
         ]);
 
@@ -268,21 +277,25 @@ class DatabaseSeeder extends Seeder
 
         Grade::factory()->create([
             'student_id' => $student4->id,
+            'value' => ($assignation1->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation1->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student4->id,
+            'value' => ($assignation2->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation2->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student4->id,
+            'value' => ($assignation3->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation3->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student4->id,
+            'value' => ($assignation7->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation7->id
         ]);
 
@@ -290,16 +303,19 @@ class DatabaseSeeder extends Seeder
 
         Grade::factory()->create([
             'student_id' => $student2->id,
+            'value' => ($assignation4->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation4->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student2->id,
+            'value' => ($assignation5->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation5->id
         ]);
 
         Grade::factory()->create([
             'student_id' => $student2->id,
+            'value' => ($assignation7->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation7->id
         ]);
 
@@ -307,6 +323,7 @@ class DatabaseSeeder extends Seeder
 
         Grade::factory()->create([
             'student_id' => $student5->id,
+            'value' => ($assignation7->classs->base == 100) ? rand(60, 100) : rand(6, 10),
             'assignation_id' => $assignation7->id
         ]);
 

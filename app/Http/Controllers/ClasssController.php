@@ -130,17 +130,44 @@ class ClasssController extends Controller
         $evaluations = Evaluation::where('classs_id', $idClass)->get();
 
 
+        
+
 
         $studentsWithGrades = [];
 
         foreach($students as $s)
         {
-            $student = Student::where('id', $s->id)
+            /* $student = Student::where('id', $s->id)
                 ->with(['grades', 'grades.assignation' => function($query) use ($idClass)
                 {
                     $query->where('classs_id', $idClass);
 
                 }, 'grades.assignation.evaluation'])->first();
+            */
+
+            /* $student = $student = Student::where('id', $s->id)
+                ->with(['grades', 'grades.assignation' => function($query) use ($idClass)
+                {
+                    $query->whereHas('classs', function($query) 
+                    {
+                        $query->where('id', 1);
+                    });
+
+                }, 'grades.assignation.evaluation'])->first(); */
+
+            $student = Student::where('id', $s->id)
+                ->with(['grades' => function($query) use ($idClass)
+                {
+                    $query->whereHas('assignation', function($query) use ($idClass)
+                    {
+                        $query->whereHas('classs', function($query) use ($idClass)
+                        {
+                            $query->where('id', $idClass);
+                        });
+                    });
+
+                }
+                , 'grades.assignation', 'grades.assignation.evaluation'])->first();
 
             $evalPerGrade = [];
         
@@ -159,36 +186,33 @@ class ClasssController extends Controller
                 ];
             }
 
+            //return $evalPerGrade;
+
             foreach($student->grades as $grade)
             {
                 $e = $grade->assignation->evaluation;
-
                 $evalPerGrade[$e->name]["totalObtained"] += $grade->value;
                 $evalPerGrade[$e->name]["totalAssignationsObtained"] += 1;
             }
 
+
+
             $studentGrade = [];
-            $studentGrade['student'] = [
-                "id" => $s->id,
-                "fullname" => $s->firstname . " " . $s->lastname,
+
+            $studentGrade = [
+                "student_id" => $s->id,
+                "student" => $s->firstname . " " . $s->lastname,
+                "total" => 0,
             ];
-            $studentGrade["percentageTotalGrade"] = 0;
 
-            foreach($evalPerGrade as $key => $evl)
+            foreach($evaluations as $e)
             {
-                $ev = (object)$evl;
+                $evl = (object)$evalPerGrade[$e->name];
 
-                $studentGrade[$key] = [
-                    "evaluation" => [
-                        "id" => $ev->evaluation->id,
-                        "value" => $ev->evaluation->value,
-                    ],
-                    "percentageGrade" => (($ev->totalObtained/$ev->totalAssignations)*$ev->percentageToEvaluate)/$ev->totalToEvaluate,
-                    "totalAssignations" => $ev->totalAssignations,
-                    "totalAssignationsObtained" => $ev->totalAssignationsObtained,
-                ];
+                $studentGrade[strtolower($e->name)] = 
+                    (($evl->totalObtained/$evl->totalAssignations)*$evl->percentageToEvaluate)/$evl->totalToEvaluate;
 
-                $studentGrade["percentageTotalGrade"] += $studentGrade[$key]['percentageGrade'];
+                $studentGrade["total"] += $studentGrade[strtolower($e->name)];
             }
 
             $studentsWithGrades[] = $studentGrade;

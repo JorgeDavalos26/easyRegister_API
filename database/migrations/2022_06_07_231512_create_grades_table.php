@@ -19,7 +19,7 @@ class CreateGradesTable extends Migration
                 ->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('assignation_id')->references('id')->on('assignations')
                 ->onDelete('cascade')->onUpdate('cascade');
-            $table->string('value');
+            $table->integer('value');
             $table->timestamps();
         });
     }
