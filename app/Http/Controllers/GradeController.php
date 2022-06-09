@@ -19,16 +19,6 @@ class GradeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreGradeRequest  $request
@@ -36,7 +26,13 @@ class GradeController extends Controller
      */
     public function store(StoreGradeRequest $request)
     {
-        //
+        $grade = Grade::create([
+            'value' => $request->value,
+            'student_id' => $request->student_id,
+            'assignation_id' => $request->assignation_id
+        ]);
+
+        return response()->success($grade);
     }
 
     /**
@@ -46,17 +42,6 @@ class GradeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Grade $grade)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Grade  $grade
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Grade $grade)
     {
         //
     }

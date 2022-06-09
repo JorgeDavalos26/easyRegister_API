@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assignation;
 use App\Http\Requests\StoreAssignationRequest;
 use App\Http\Requests\UpdateAssignationRequest;
+use App\Models\Grade;
 
 class AssignationController extends Controller
 {
@@ -15,17 +16,8 @@ class AssignationController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $assignations = Assignation::with(['evaluation', 'classs'])->get();
+        return response()->success($assignations);
     }
 
     /**
@@ -36,7 +28,14 @@ class AssignationController extends Controller
      */
     public function store(StoreAssignationRequest $request)
     {
-        //
+        $assignation = Assignation::create([
+            "name" => $request->name,
+            "description" => $request->description,
+            "classs_id" => $request->classs_id,
+            "evaluation_id" => $request->evaluation_id
+        ]);
+
+        return response()->success($assignation);
     }
 
     /**
@@ -47,18 +46,7 @@ class AssignationController extends Controller
      */
     public function show(Assignation $assignation)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Assignation  $assignation
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Assignation $assignation)
-    {
-        //
+        return response()->success($assignation);
     }
 
     /**
@@ -70,7 +58,7 @@ class AssignationController extends Controller
      */
     public function update(UpdateAssignationRequest $request, Assignation $assignation)
     {
-        //
+        
     }
 
     /**
@@ -81,6 +69,22 @@ class AssignationController extends Controller
      */
     public function destroy(Assignation $assignation)
     {
-        //
+        $assignation->delete();
+        return response()->success($assignation);
     }
+
+
+    public function getGradeOfStudentInAssignation($idAssignation, $idStudent)
+    {
+        $grade = Grade::with(['student'])
+            ->where('assignation_id', $idAssignation)->where('student_id', $idStudent)->first();
+        return response()->success($grade);
+    }
+
+    public function getGradesOfAssignation($idAssignation)
+    {
+        $grades = Grade::with(['student'])->where('assignation_id', $idAssignation)->get();
+        return response()->success($grades);
+    }
+
 }

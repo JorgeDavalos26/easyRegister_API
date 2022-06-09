@@ -18,6 +18,7 @@ class CreateClasssesTable extends Migration
             $table->foreignId('teacher_id')->references('id')->on('teachers')
                 ->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
+            $table->integer('base');
             $table->timestamps();
         });
     }
