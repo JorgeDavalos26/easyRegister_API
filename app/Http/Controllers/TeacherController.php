@@ -89,9 +89,8 @@ class TeacherController extends Controller
 
     public function getClassesOfTeacher(Request $request, $idTeacher)
     {
-        $classes = Classs::where('teacher_id', $idTeacher)->get();
-
-        return response()->json();
+        $classes = Classs::with(['teacher', 'teacher.user'])->where('teacher_id', $idTeacher)->get();
+        return response()->success($classes);
     }
 
 }
