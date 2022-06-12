@@ -21,9 +21,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
         return Response::json([
             'status'  => $status,
             'data' => null,
-            'error' => [
-                'message' => $message,
-            ]
+            'error' => $message,
         ], $status);
     });
   }
