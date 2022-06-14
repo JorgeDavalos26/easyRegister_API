@@ -23,4 +23,9 @@ class ClassStudent extends Model
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }
+
+    public function classs()
+    {
+        return $this->belongsTo(Classs::class, 'classs_id', 'id');
+    }
 }
