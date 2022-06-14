@@ -125,36 +125,12 @@ class ClasssController extends Controller
             $students[] = $c->student;
         }
 
-
-
         $evaluations = Evaluation::where('classs_id', $idClass)->get();
-
-
-        
-
 
         $studentsWithGrades = [];
 
         foreach($students as $s)
         {
-            /* $student = Student::where('id', $s->id)
-                ->with(['grades', 'grades.assignation' => function($query) use ($idClass)
-                {
-                    $query->where('classs_id', $idClass);
-
-                }, 'grades.assignation.evaluation'])->first();
-            */
-
-            /* $student = $student = Student::where('id', $s->id)
-                ->with(['grades', 'grades.assignation' => function($query) use ($idClass)
-                {
-                    $query->whereHas('classs', function($query) 
-                    {
-                        $query->where('id', 1);
-                    });
-
-                }, 'grades.assignation.evaluation'])->first(); */
-
             $student = Student::where('id', $s->id)
                 ->with(['grades' => function($query) use ($idClass)
                 {
@@ -224,9 +200,17 @@ class ClasssController extends Controller
     public function getEvaluationsOfClass($idClass)
     {
         $evaluations = Evaluation::where('classs_id', $idClass)->get();
-
         return response()->success($evaluations);
     }
 
+    public function removeStudentFromClass(Request $request, $idClass)
+    {
+        $classStudent = ClassStudent::with(['classs', 'student'])->
+            where('classs_id', $idClass)->where('student_id', $request->student_id)->firstOrFail();
+
+        $classStudent->delete();
+
+        return response()->success($classStudent);
+    }
 
 }
