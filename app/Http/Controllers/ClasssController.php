@@ -34,13 +34,18 @@ class ClasssController extends Controller
      */
     public function store(StoreClasssRequest $request)
     {
+        $evals = json_decode($request->evaluations);
+    
+        if(array_reduce($evals, array($this, "sumEvaluations"), 0) !== 100)
+        {
+            return response()->error('Rubricas do not complete 100%');
+        }
+
         $class = Classs::create([
             'name' => $request->name,
             'base' => $request->base,
             'teacher_id' => $request->teacher_id
         ]);
-
-        $evals = json_decode($request->evaluations);
 
         foreach($evals as $e)
         {
@@ -52,10 +57,6 @@ class ClasssController extends Controller
         }
 
         $students = json_decode($request->students);
-
-        //return $students;
-
-        //return var_dump($students);
 
         foreach($students as $student)
         {
@@ -251,5 +252,9 @@ class ClasssController extends Controller
         return response()->success($evaluations);
     }
 
+    function sumEvaluations($total, $e)
+    {
+        return $total + intval($e->value);
+    }
 
 }
