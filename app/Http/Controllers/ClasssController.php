@@ -51,6 +51,29 @@ class ClasssController extends Controller
             ]);
         }
 
+        $students = json_decode($request->students);
+
+        //return $students;
+
+        //return var_dump($students);
+
+        foreach($students as $student)
+        {
+            $student = Student::create([
+                'firstname' => $student->firstname,
+                'lastname' => $student->lastname,
+                'email' => $student->email,
+                'parent_whatsapp' => $student->parent_whatsapp,
+                'number_list' => $student->number_list,
+                'teacher_id' => $request->teacher_id
+            ]);
+
+            ClassStudent::create([
+                'classs_id' => $class->id,
+                'student_id' => $student->id
+            ]);
+        }
+
         $class = Classs::with(['evaluations'])->where('id', $class->id)->first();
 
         return response()->success($class);

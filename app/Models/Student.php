@@ -14,7 +14,8 @@ class Student extends Model
         'firstname',
         'lastname',
         'email',
-        'parent_whatsapp'
+        'parent_whatsapp',
+        'number_list'
     ];
 
     protected $hidden = [
