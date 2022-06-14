@@ -48,6 +48,7 @@ Route::prefix('v1')->group(function ()
        Route::get('{id}/assignations', [ClasssController::class, 'getAssignationsOfClass']);
        Route::get('{id}/grades', [ClasssController::class, 'getGradesOfClass']);
        Route::get('{id}/evaluations', [ClasssController::class, 'getEvaluationsOfClass']);
+       Route::post('{id}/removeStudent', [ClasssController::class, 'removeStudentFromClass']);
     });
 
     Route::prefix('assignations')->group(function ()
